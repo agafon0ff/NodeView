@@ -1,6 +1,14 @@
 #include "ropeitem.h"
 #include <QPainter>
 #include <QDebug>
+#include <QtMath>
+
+qreal distance(const QPointF &a, const QPointF &b)
+{
+    qreal dx = a.x() - b.x();
+    qreal dy = a.y() - b.y();
+    return qSqrt(dx * dx + dy * dy);
+}
 
 RopeItem::RopeItem(PortItem *portOut, PortItem *portIn, QGraphicsItem *parent)
 : QGraphicsObject(parent),
@@ -57,16 +65,12 @@ void RopeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
 
     path.moveTo(m_pointIn);
 
-    int addition = 50;
-    if (m_pointOut.x() > m_pointIn.x())
-        addition = m_pointOut.x() - m_pointIn.x();
-    else addition = m_pointIn.x() - m_pointOut.x();
+    int additionX = distance(m_pointOut, m_pointIn) / 2;
+    if (additionX > 100) additionX = 100;
 
-    if (addition > 50) addition = 50;
-
-    path.cubicTo(m_pointIn.x()-addition,m_pointIn.y(),
-                 m_pointOut.x()+addition,m_pointOut.y(),
-                 m_pointOut.x(),m_pointOut.y());
+    path.cubicTo(m_pointIn.x() - additionX, m_pointIn.y(),
+                 m_pointOut.x() + additionX, m_pointOut.y(),
+                 m_pointOut.x(), m_pointOut.y());
 
     p->drawPath(path);
 
@@ -159,14 +163,14 @@ void RopeItem::calculateRope()
             portPosOut = portPosIn;
     }
 
-    qreal addition = 200;
-    qreal x_pos = qMin(portPosOut.x(),portPosIn.x())-addition;
-    qreal y_pos = qMin(portPosOut.y(),portPosIn.y())-addition;
-    qreal w_size = qMax(portPosOut.x(),portPosIn.x()) - x_pos + (addition*2);
-    qreal h_size = qMax(portPosOut.y(),portPosIn.y()) - y_pos + (addition*2);
+    qreal addition = 40;
+    qreal x_pos = qMin(portPosOut.x(), portPosIn.x()) - addition;
+    qreal y_pos = qMin(portPosOut.y(), portPosIn.y()) - addition;
+    qreal w_size = qMax(portPosOut.x(), portPosIn.x()) - x_pos + addition;
+    qreal h_size = qMax(portPosOut.y(), portPosIn.y()) - y_pos + addition;
 
-    setPos(x_pos,y_pos);
-    m_size = QSize(w_size,h_size);
+    setPos(x_pos ,y_pos);
+    m_size = QSize(w_size, h_size);
 
     qreal pointOutX = portPosOut.x() - x_pos;
     qreal pointOutY = portPosOut.y() - y_pos;

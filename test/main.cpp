@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
         portOut = node->createPortOut(15, QColor(Qt::yellow));
 
-        node->setPos(i*250,i*50);
+        node->setPos(i*20,i*90);
     }
 
     return a.exec();

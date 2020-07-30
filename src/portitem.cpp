@@ -104,7 +104,7 @@ bool PortItem::isHovered(const QPointF &point)
 
 void PortItem::calculatePosition()
 {
-    QPointF portPos = QPointF(m_ellipseRadius,m_size.height()/2);
+    QPointF portPos = QPointF(m_ellipseRadius, m_size.height()/2);
     QPointF mapPortPos = mapToScene(portPos);
 
     if (mapPortPos != m_portPos)
