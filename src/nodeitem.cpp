@@ -311,7 +311,11 @@ void NodeItem::setTitle(const QString &title)
     m_title = title;
 
     QFontMetrics fm(m_font);
+#if QT_VERSION > 0x050906
     m_titleSize = QSizeF(fm.horizontalAdvance(m_title),fm.height());
+#else
+    m_titleSize = QSizeF(fm.width(m_title),fm.height());
+#endif
 
     updateSize();
 }
