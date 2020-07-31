@@ -29,23 +29,18 @@ private:
     bool m_isSelected;
 
     QList<PortItem*> m_portList;
-    QVariantMap m_parameters;
     QString m_title;
-
 
     QRectF boundingRect() const;
     QPainterPath shape() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget);
-
-    void mousePressEvent(QGraphicsSceneMouseEvent *e);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 signals:
     void selected(bool state);
+    void positionChanged();
 
 public slots:
     bool isHovered(const QPointF &point);
@@ -76,15 +71,15 @@ public slots:
     void setTitle(const QString &title);
     void clearTitle();
 
+    qreal width(){return m_size.width();}
+    qreal height(){return m_size.height();}
+    QSizeF size(){return m_size;}
+
     void setFont(const QFont &font);
     void setFontColor(const QColor &color);
     void setTitleColor(const QColor &color);
     void setBackgroundColor(const QColor &color);
     void setBackgroundBrush(const QBrush &brush);
-
-    const QVariantMap &parameters(){return m_parameters;}
-    void setParameters(const QVariantMap &parameters){m_parameters = parameters;}
-    void setParameter(const QString &key, const QVariant &value){m_parameters.insert(key,value);}
 };
 
 #endif // NODEITEM_H

@@ -14,6 +14,7 @@ PortItem::PortItem(PortItem::PortTypes type, uint posY, uint num, QColor color, 
     m_type(type)
 {
     setAcceptHoverEvents(true);
+    setFlags(ItemIsSelectable);
 }
 
 QRectF PortItem::boundingRect() const
@@ -64,6 +65,8 @@ QUuid PortItem::parentUuid()
 void PortItem::resize(qreal w, qreal h)
 {
     m_size = QSize(w,h);
+
+    prepareGeometryChange();
     update();
 }
 

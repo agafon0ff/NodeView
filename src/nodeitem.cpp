@@ -81,13 +81,13 @@ void NodeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
 
     if (isSelected)
     {
-        pen.setWidth(3);
+        pen.setWidth(2);
         pen.setBrush(QColor::fromRgb(200,80,20,255));
         setZValue(2);
     }
     else
     {
-        pen.setWidth(2);
+        pen.setWidth(1);
         pen.setBrush(QColor::fromRgb(0,0,0,170));
         setZValue(1);
     }
@@ -104,49 +104,30 @@ void NodeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
         p->setBrush(m_backgroundBrush);
     else
     {
-        qreal gradientHeight = ((m_titleSize.height()+m_indentSize.height())*100/m_size.height())*0.01;
-        QLinearGradient gradient_1(m_size.width()/2,0,m_size.width()/2,m_size.height());
-        gradient_1.setColorAt(0,m_backgroundColor);
-        gradient_1.setColorAt(gradientHeight,m_titleColor);
-        gradient_1.setColorAt(gradientHeight+0.01,m_backgroundColor);
+        qreal gradientHeight = ((m_titleSize.height() + m_indentSize.height()) * 100 / m_size.height()) * 0.01;
+        QLinearGradient gradient_1(m_size.width() / 2, 0, m_size.width() / 2, m_size.height());
+        gradient_1.setColorAt(0, m_backgroundColor);
+        gradient_1.setColorAt(gradientHeight, m_titleColor);
+        gradient_1.setColorAt(gradientHeight + 0.01, m_backgroundColor);
 
         p->setBrush(gradient_1);
     }
-    p->drawRoundedRect(6,1,m_size.width()-12,m_size.height()-2,
-                       (qreal)m_size.width()/((qreal)m_size.width()/5.0),
-                       (qreal)m_size.height()/((qreal)m_size.height()/5.0));
+    p->drawRoundedRect(6, 1, m_size.width() - 12, m_size.height() - 2,
+                       (qreal)m_size.width() / ((qreal)m_size.width() / 5.0),
+                       (qreal)m_size.height() / ((qreal)m_size.height() / 5.0));
 
     p->setPen(QPen(m_fontColor,2));
     p->setFont(m_font);
-    p->drawText(QRect(m_indentSize.width(),m_indentSize.height(),
-                      m_size.width()-m_indentSize.width()*2,
-                      m_titleSize.height()),Qt::AlignCenter,m_title);
-}
-
-void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
-{
-    QGraphicsItem::mousePressEvent(e);
-    update();
-}
-
-void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
-{
-    QGraphicsItem::mouseMoveEvent(e);
-    update();
-}
-
-void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
-{
-    QGraphicsItem::mouseReleaseEvent(e);
-    update();
+    p->drawText(QRect(m_indentSize.width(), m_indentSize.height(),
+                      m_size.width() - m_indentSize.width() * 2,
+                      m_titleSize.height()), Qt::AlignCenter, m_title);
 }
 
 QVariant NodeItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
 {
     if (change == ItemPositionHasChanged)
     {
-        foreach (PortItem *port, m_portList)
-            port->calculatePosition();
+        emit positionChanged();
     }
     else if (change == ItemVisibleHasChanged)
     {
@@ -190,24 +171,30 @@ PortItem *NodeItem::isHoveredPort(const QPointF &point)
 
 void NodeItem::updateSize()
 {
-    m_size = QSizeF(m_widget->width()+m_indentSize.width()*2,m_widget->height()+m_indentSize.height()*2+m_titleSize.height());
-    m_widget->move(m_indentSize.width(),m_indentSize.height()+m_titleSize.height());
+    m_size = QSizeF(m_widget->width() + m_indentSize.width() * 2,
+                    m_widget->height() + m_indentSize.height() * 2 + m_titleSize.height());
+
+    m_widget->move(m_indentSize.width(), m_indentSize.height() + m_titleSize.height());
 
     foreach (PortItem *port, m_portList)
     {
         if (port->portType() == PortItem::TypeIn)
-            port->setPos(0,(port->posY()+m_indentSize.height()+m_titleSize.height())-port->size().height()/2);
-        else port->setPos(m_size.width()-port->size().width(),(port->posY()+m_indentSize.height()+m_titleSize.height())-port->size().height()/2);
+            port->setPos(0, (port->posY() + m_indentSize.height() + m_titleSize.height()) - port->size().height() / 2);
+        else port->setPos(m_size.width() - port->size().width(),
+                          (port->posY() + m_indentSize.height() + m_titleSize.height()) - port->size().height() / 2);
     }
 
+    prepareGeometryChange();
     update();
 }
 
 void NodeItem::addPortIn(PortItem *port)
 {
     if (!port) return;
+    if (m_portList.contains(port)) return;
 
     port->setParentItem(this);
+    connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
     m_portList.append(port);
 
     updateSize();
@@ -216,6 +203,7 @@ void NodeItem::addPortIn(PortItem *port)
 PortItem *NodeItem::createPortIn(uint posY, QColor color)
 {
     PortItem *port = new PortItem(PortItem::TypeIn,posY,m_portList.count(),color,this);
+    connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
     m_portList.append(port);
 
     updateSize();
@@ -226,6 +214,7 @@ PortItem *NodeItem::createPortIn(uint posY, QColor color)
 PortItem *NodeItem::createPortIn(uint posY, QColor color, uint num)
 {
     PortItem *port = new PortItem(PortItem::TypeIn,posY,m_portList.count(),color,this);
+    connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
     port->setNumber(num);
     m_portList.append(port);
 
@@ -237,8 +226,10 @@ PortItem *NodeItem::createPortIn(uint posY, QColor color, uint num)
 void NodeItem::addPortOut(PortItem *port)
 {
     if (!port) return;
+    if (m_portList.contains(port)) return;
 
     port->setParentItem(this);
+    connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
     m_portList.append(port);
 
     updateSize();
@@ -247,6 +238,7 @@ void NodeItem::addPortOut(PortItem *port)
 PortItem *NodeItem::createPortOut(uint posY, QColor color)
 {
     PortItem *port = new PortItem(PortItem::TypeOut,posY,m_portList.count(),color,this);
+    connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
     m_portList.append(port);
 
     updateSize();
@@ -257,6 +249,7 @@ PortItem *NodeItem::createPortOut(uint posY, QColor color)
 PortItem *NodeItem::createPortOut(uint posY, QColor color, uint num)
 {
     PortItem *port = new PortItem(PortItem::TypeOut,posY,m_portList.count(),color,this);
+    connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
     port->setNumber(num);
     m_portList.append(port);
 
@@ -289,14 +282,15 @@ void NodeItem::removePortAt(uint num)
 void NodeItem::removePort(PortItem *port)
 {
     if (!port) return;
+    if (!m_portList.contains(port)) return;
 
-    if (!m_portList.contains(port))
-        return;
+    disconnect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
 
     if (scene()->views().count() > 0)
     {
         if (scene()->views().at(0)->inherits("NodeView"))
         {
+
             NodeView *nView = (NodeView*)scene()->views().at(0);
             nView->removePortConnections(port);
 

@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 #include "nodeitem.h"
 #include "ropeitem.h"
+#include "groupitem.h"
 
 class NodeView : public QGraphicsView
 {
@@ -21,11 +22,13 @@ private:
     RopeItem *m_activeRope;
     QList<NodeItem*> m_nodeList;
     QList<RopeItem*> m_ropeList;
+    QList<GroupItem*> m_groupList;
 
     QList<NodeItem*> m_selectedNodes;
 
     bool m_isCheckingColor;
     bool m_isOnlyOneInputConnection;
+    qreal m_ropeFlexion;
 
     void wheelEvent(QWheelEvent *event);
     void drawBackground(QPainter *painter, const QRectF &r);
@@ -61,15 +64,20 @@ public slots:
     void removeNode(NodeItem *node);
     NodeItem *nodeAt(const QUuid &uuid);
 
+    void addGroup(GroupItem *group);
+    GroupItem *createGroup(QList<NodeItem*> list);
+
     bool createConnection(PortItem *portOut, PortItem *portIn);
     void removePortConnections(PortItem *port);
 
     QList<NodeItem*> nodeList(){return m_nodeList;}
     QList<RopeItem*> ropeList(){return m_ropeList;}
+    QList<GroupItem*> groupList(){return m_groupList;}
     QList<NodeItem*> selectedNodeList(){return m_selectedNodes;}
 
     void setCheckingColor(bool state = true);
     void setOnlyOneInputConnection(bool state = true);
+    void setRopeFlexion(qreal value = 100.0);
 };
 
 #endif // NODEVIEW_H

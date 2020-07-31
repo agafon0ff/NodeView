@@ -16,7 +16,8 @@ RopeItem::RopeItem(PortItem *portOut, PortItem *portIn, QGraphicsItem *parent)
     m_portIn(portIn),
     m_size(QSize(20,20)),
     m_color(QColor(Qt::white)),
-    m_isConnected(false)
+    m_isConnected(false),
+    m_flexion(100.0)
 {
     setZValue(0);
 
@@ -65,11 +66,11 @@ void RopeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
 
     path.moveTo(m_pointIn);
 
-    int additionX = distance(m_pointOut, m_pointIn) / 2;
-    if (additionX > 100) additionX = 100;
+    qreal flexion = distance(m_pointOut, m_pointIn) / 2;
+    if (flexion > m_flexion) flexion = m_flexion;
 
-    path.cubicTo(m_pointIn.x() - additionX, m_pointIn.y(),
-                 m_pointOut.x() + additionX, m_pointOut.y(),
+    path.cubicTo(m_pointIn.x() - flexion, m_pointIn.y(),
+                 m_pointOut.x() + flexion, m_pointOut.y(),
                  m_pointOut.x(), m_pointOut.y());
 
     p->drawPath(path);
@@ -107,6 +108,12 @@ void RopeItem::disconnectFromPorts()
 void RopeItem::setColor(QColor color)
 {
     m_color = color;
+    update();
+}
+
+void RopeItem::setFlexion(qreal value)
+{
+    m_flexion = value;
     update();
 }
 
@@ -181,5 +188,6 @@ void RopeItem::calculateRope()
     m_pointOut = QPointF(pointOutX,pointOutY);
     m_pointIn = QPointF(pointInX,pointInY);
 
+    prepareGeometryChange();
     update();
 }

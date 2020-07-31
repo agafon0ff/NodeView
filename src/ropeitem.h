@@ -24,6 +24,7 @@ private:
     QColor m_color;
 
     bool m_isConnected;
+    qreal m_flexion;
 
     QRectF boundingRect() const;
     QPainterPath shape() const;
@@ -37,6 +38,9 @@ signals:
 public slots:
     QColor color(){return m_color;}
     void setColor(QColor color);
+
+    qreal flexion(){return m_flexion;}
+    void setFlexion(qreal value);
 
     PortItem *portOut(){return m_portOut;}
     void setPortOut(PortItem *port);

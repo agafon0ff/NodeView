@@ -14,7 +14,8 @@ NodeView::NodeView(QWidget *parent) : QGraphicsView(parent),
     m_moveScene(false),
     m_activeRope(0),
     m_isCheckingColor(true),
-    m_isOnlyOneInputConnection(true)
+    m_isOnlyOneInputConnection(true),
+    m_ropeFlexion(100.0)
 {
     setRenderHint(QPainter::Antialiasing, true);
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
@@ -250,6 +251,7 @@ void NodeView::createRopeHitPort(PortItem *port)
         if (isPortFree(port))
         {
             m_activeRope = new RopeItem(0,port);
+            m_activeRope->setFlexion(m_ropeFlexion);
             m_scene->addItem(m_activeRope);
             m_ropeList.append(m_activeRope);
         }
@@ -263,6 +265,7 @@ void NodeView::createRopeHitPort(PortItem *port)
     else
     {
         m_activeRope = new RopeItem(port,0);
+        m_activeRope->setFlexion(m_ropeFlexion);
         m_scene->addItem(m_activeRope);
         m_ropeList.append(m_activeRope);
     }
@@ -415,6 +418,24 @@ NodeItem *NodeView::nodeAt(const QUuid &uuid)
     return result;
 }
 
+void NodeView::addGroup(GroupItem *group)
+{
+    group->setPos(m_scenePos);
+    m_scene->addItem(group);
+    m_groupList.append(group);
+}
+
+GroupItem *NodeView::createGroup(QList<NodeItem *> list)
+{
+    Q_UNUSED(list);
+
+    GroupItem *group = new GroupItem;
+    group->setNodes(list);
+    addGroup(group);
+
+    return group;
+}
+
 bool NodeView::createConnection(PortItem *portOut, PortItem *portIn)
 {
     bool result = false;
@@ -422,6 +443,7 @@ bool NodeView::createConnection(PortItem *portOut, PortItem *portIn)
     if (isPortFree(portIn))
     {
         RopeItem *rope = new RopeItem(portOut,portIn);
+        rope->setFlexion(m_ropeFlexion);
         m_scene->addItem(rope);
         m_ropeList.append(rope);
         result = true;
@@ -453,6 +475,12 @@ void NodeView::setCheckingColor(bool state)
 void NodeView::setOnlyOneInputConnection(bool state)
 {
     m_isOnlyOneInputConnection = state;
+    update();
+}
+
+void NodeView::setRopeFlexion(qreal value)
+{
+    m_ropeFlexion = value;
     update();
 }
 
