@@ -398,6 +398,9 @@ void NodeView::removeNode(NodeItem *node)
         }
     }
 
+    foreach(GroupItem *group, m_groupList)
+        group->removeNode(node);
+
     m_nodeList.removeOne(node);
     m_scene->removeItem(node);
 }
