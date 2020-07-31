@@ -22,7 +22,7 @@ GroupItem::GroupItem(QGraphicsItem *parent) : QGraphicsObject(parent),
     m_backgroundBrush(QBrush(m_backgroundColor)),
     m_isUserBrush(false),
     m_isSelected(false),
-    m_isMoved(false)
+    m_isMove(false)
 {
     setZValue(-1);
     setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
@@ -133,7 +133,7 @@ void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 
 void GroupItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
-    m_isMoved = true;
+    m_isMove = true;
 
     foreach (NodeItem *node, m_nodeList)
         node->setPos(m_deltaPosMap.value(node) - (m_deltaPos - pos()));
@@ -144,7 +144,7 @@ void GroupItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 
 void GroupItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
-    m_isMoved = false;
+    m_isMove = false;
     QGraphicsItem::mouseReleaseEvent(e);
     update();
 }
@@ -209,7 +209,7 @@ void GroupItem::clearNodes()
 
 void GroupItem::updateSize()
 {
-    if (m_isMoved) return;
+    if (m_isMove) return;
     if (m_nodeList.count() < 1) return;
 
     NodeItem *firstNode = m_nodeList.at(0);

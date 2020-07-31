@@ -29,7 +29,7 @@ private:
     QPointF m_deltaPos;
     bool m_isUserBrush;
     bool m_isSelected;
-    bool m_isMoved;
+    bool m_isMove;
 
     QMap<NodeItem*, QPointF> m_deltaPosMap;
     QList<NodeItem*> m_nodeList;
