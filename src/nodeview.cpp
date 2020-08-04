@@ -429,13 +429,27 @@ void NodeView::addGroup(GroupItem *group)
 
 GroupItem *NodeView::createGroup(QList<NodeItem *> list)
 {
-    Q_UNUSED(list);
-
     GroupItem *group = new GroupItem;
     group->setNodes(list);
     addGroup(group);
 
     return group;
+}
+
+GroupItem *NodeView::getItemGroup(NodeItem *node)
+{
+    GroupItem *result = Q_NULLPTR;
+
+    foreach (GroupItem *group, m_groupList)
+    {
+        if(group->nodeList().contains(node))
+        {
+            result = group;
+            break;
+        }
+    }
+
+    return result;
 }
 
 bool NodeView::createConnection(PortItem *portOut, PortItem *portIn)

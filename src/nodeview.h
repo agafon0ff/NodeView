@@ -66,6 +66,7 @@ public slots:
 
     void addGroup(GroupItem *group);
     GroupItem *createGroup(QList<NodeItem*> list);
+    GroupItem *getItemGroup(NodeItem* node);
 
     bool createConnection(PortItem *portOut, PortItem *portIn);
     void removePortConnections(PortItem *port);

@@ -26,12 +26,10 @@ private:
     QColor m_titleColor;
     QColor m_backgroundColor;
     QBrush m_backgroundBrush;
-    QPointF m_deltaPos;
     bool m_isUserBrush;
     bool m_isSelected;
     bool m_isMove;
 
-    QMap<NodeItem*, QPointF> m_deltaPosMap;
     QList<NodeItem*> m_nodeList;
 
     QRectF boundingRect() const;
@@ -52,6 +50,8 @@ public slots:
     void setNodes(QList<NodeItem*> list);
     void removeNode(NodeItem *node);
     void clearNodes();
+
+    QList<NodeItem*> nodeList() const {return m_nodeList;}
 
     void updateSize();
 

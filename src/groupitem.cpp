@@ -17,8 +17,8 @@ GroupItem::GroupItem(QGraphicsItem *parent) : QGraphicsObject(parent),
     m_titleSize(QSizeF(0,0)),
     m_font(QFont("Calibri",10,QFont::Medium)),
     m_fontColor(QColor(Qt::black)),
-    m_titleColor(QColor::fromRgb(190,160,140,150)),
-    m_backgroundColor(QColor::fromRgb(250,190,160,150)),
+    m_titleColor(QColor::fromRgb(207, 244, 241, 150)),
+    m_backgroundColor(QColor::fromRgb(207, 244, 241, 100)),
     m_backgroundBrush(QBrush(m_backgroundColor)),
     m_isUserBrush(false),
     m_isSelected(false),
@@ -122,22 +122,17 @@ void GroupItem::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget
 
 void GroupItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
-    m_deltaPos = pos();
+    QGraphicsItem::mousePressEvent(e);
 
     foreach (NodeItem *node, m_nodeList)
-        m_deltaPosMap[node] = node->pos();
+        node->setSelected(true);
 
-    QGraphicsItem::mousePressEvent(e);
     update();
 }
 
 void GroupItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
     m_isMove = true;
-
-    foreach (NodeItem *node, m_nodeList)
-        node->setPos(m_deltaPosMap.value(node) - (m_deltaPos - pos()));
-
     QGraphicsItem::mouseMoveEvent(e);
     update();
 }
@@ -146,6 +141,10 @@ void GroupItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     m_isMove = false;
     QGraphicsItem::mouseReleaseEvent(e);
+
+    foreach (NodeItem *node, m_nodeList)
+        node->setSelected(false);
+
     update();
 }
 
@@ -172,21 +171,16 @@ void GroupItem::addNode(NodeItem *node)
     connect(node, &NodeItem::positionChanged, this, &GroupItem::updateSize);
 
     m_nodeList.append(node);
-    m_deltaPosMap.insert(node, node->pos());
     updateSize();
 }
 
 void GroupItem::setNodes(QList<NodeItem*> list)
 {
     m_nodeList.clear();
-    m_deltaPosMap.clear();
     m_nodeList = list;
 
     foreach (NodeItem *node, m_nodeList)
-    {
         connect(node, &NodeItem::positionChanged, this, &GroupItem::updateSize);
-        m_deltaPosMap.insert(node, node->pos());
-    }
 
     updateSize();
 }
@@ -196,14 +190,12 @@ void GroupItem::removeNode(NodeItem *node)
     if (!m_nodeList.contains(node)) return;
 
     m_nodeList.removeOne(node);
-    m_deltaPosMap.remove(node);
     updateSize();
 }
 
 void GroupItem::clearNodes()
 {
     m_nodeList.clear();
-    m_deltaPosMap.clear();
     updateSize();
 }
 
