@@ -51,7 +51,6 @@ private:
 
     void removeActiveRope();
 
-    bool isPortFree(PortItem *port);
     RopeItem *getRopeWithPort(PortItem *port);
 
 signals:
@@ -75,6 +74,8 @@ public slots:
     QList<RopeItem*> ropeList(){return m_ropeList;}
     QList<GroupItem*> groupList(){return m_groupList;}
     QList<NodeItem*> selectedNodeList(){return m_selectedNodes;}
+
+    bool isPortFree(PortItem *port);
 
     void setCheckingColor(bool state = true);
     void setOnlyOneInputConnection(bool state = true);

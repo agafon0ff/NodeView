@@ -337,20 +337,6 @@ void NodeView::removeActiveRope()
     m_activeRope = Q_NULLPTR;
 }
 
-bool NodeView::isPortFree(PortItem *port)
-{
-    bool result = true;
-    foreach (RopeItem *rope, m_ropeList)
-    {
-        if (rope->portIn() == port || rope->portOut() == port)
-        {
-            result = false;
-            break;
-        }
-    }
-    return result;
-}
-
 RopeItem *NodeView::getRopeWithPort(PortItem *port)
 {
     RopeItem *result = Q_NULLPTR;
@@ -480,6 +466,20 @@ void NodeView::removePortConnections(PortItem *port)
         m_ropeList.removeOne(rope);
         m_scene->removeItem(rope);
     }
+}
+
+bool NodeView::isPortFree(PortItem *port)
+{
+    bool result = true;
+    foreach (RopeItem *rope, m_ropeList)
+    {
+        if (rope->portIn() == port || rope->portOut() == port)
+        {
+            result = false;
+            break;
+        }
+    }
+    return result;
 }
 
 void NodeView::setCheckingColor(bool state)
