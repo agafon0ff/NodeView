@@ -18,6 +18,7 @@ private:
     QPointF m_scenePos;
     QPointF m_pressPos;
     bool m_moveScene;
+    qreal m_currentScale;
 
     RopeItem *m_activeRope;
     QList<NodeItem*> m_nodeList;

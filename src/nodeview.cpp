@@ -12,6 +12,7 @@ NodeView::NodeView(QWidget *parent) : QGraphicsView(parent),
     m_scenePos(QPointF(0,0)),
     m_pressPos(QPointF(0,0)),
     m_moveScene(false),
+    m_currentScale(1.0),
     m_activeRope(0),
     m_isCheckingColor(true),
     m_isOnlyOneInputConnection(true),
@@ -37,9 +38,21 @@ NodeView::~NodeView()
 
 void NodeView::wheelEvent(QWheelEvent *e)
 {
-    qreal scale_factor = 1.15;
-    if (e->delta() > 0) scale(scale_factor,scale_factor);
-    else scale(1/scale_factor, 1/scale_factor);
+    qreal scaleFactor = 1.15;
+
+    if (e->delta() > 0)
+    {
+        if(m_currentScale < scaleFactor)
+        {
+            scale(scaleFactor,scaleFactor);
+            m_currentScale *= scaleFactor;
+        }
+    }
+    else if(m_currentScale > 0.1)
+    {
+        scale(1/scaleFactor, 1/scaleFactor);
+        m_currentScale /= scaleFactor;
+    }
 
     update();
 }
