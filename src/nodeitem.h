@@ -51,12 +51,12 @@ public slots:
     QWidget *widget(){return m_widget;}
 
     void addPortIn(PortItem *port);
-    PortItem *createPortIn(uint posY, QColor color);
-    PortItem *createPortIn(uint posY, QColor color, uint num);
+    PortItem *createPortIn(int posY, QColor color);
+    PortItem *createPortIn(int posY, QColor color, uint num);
 
     void addPortOut(PortItem *port);
-    PortItem *createPortOut(uint posY, QColor color);
-    PortItem *createPortOut(uint posY, QColor color, uint num);
+    PortItem *createPortOut(int posY, QColor color);
+    PortItem *createPortOut(int posY, QColor color, uint num);
 
     QList<PortItem*> portList(){return m_portList;}
     PortItem* portAt(uint num);

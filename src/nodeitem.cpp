@@ -200,7 +200,7 @@ void NodeItem::addPortIn(PortItem *port)
     updateSize();
 }
 
-PortItem *NodeItem::createPortIn(uint posY, QColor color)
+PortItem *NodeItem::createPortIn(int posY, QColor color)
 {
     PortItem *port = new PortItem(PortItem::TypeIn,posY,m_portList.count(),color,this);
     connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
@@ -211,7 +211,7 @@ PortItem *NodeItem::createPortIn(uint posY, QColor color)
     return port;
 }
 
-PortItem *NodeItem::createPortIn(uint posY, QColor color, uint num)
+PortItem *NodeItem::createPortIn(int posY, QColor color, uint num)
 {
     PortItem *port = new PortItem(PortItem::TypeIn,posY,m_portList.count(),color,this);
     connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
@@ -235,7 +235,7 @@ void NodeItem::addPortOut(PortItem *port)
     updateSize();
 }
 
-PortItem *NodeItem::createPortOut(uint posY, QColor color)
+PortItem *NodeItem::createPortOut(int posY, QColor color)
 {
     PortItem *port = new PortItem(PortItem::TypeOut,posY,m_portList.count(),color,this);
     connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
@@ -246,7 +246,7 @@ PortItem *NodeItem::createPortOut(uint posY, QColor color)
     return port;
 }
 
-PortItem *NodeItem::createPortOut(uint posY, QColor color, uint num)
+PortItem *NodeItem::createPortOut(int posY, QColor color, uint num)
 {
     PortItem *port = new PortItem(PortItem::TypeOut,posY,m_portList.count(),color,this);
     connect(this, &NodeItem::positionChanged, port, &PortItem::calculatePosition);
