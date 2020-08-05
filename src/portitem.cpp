@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QDebug>
 
-PortItem::PortItem(PortItem::PortTypes type, uint posY, uint num, QColor color, QGraphicsItem *parent) : QGraphicsObject(parent),
+PortItem::PortItem(PortItem::PortTypes type, int posY, uint num, QColor color, QGraphicsItem *parent) : QGraphicsObject(parent),
     m_posY(posY),
     m_size(QSize(12,12)),
     m_color(color),

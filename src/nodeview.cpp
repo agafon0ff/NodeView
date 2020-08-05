@@ -16,7 +16,8 @@ NodeView::NodeView(QWidget *parent) : QGraphicsView(parent),
     m_activeRope(0),
     m_isCheckingColor(true),
     m_isOnlyOneInputConnection(true),
-    m_ropeFlexion(100.0)
+    m_ropeFlexion(100.0),
+    m_isConnectionDragable(true)
 {
     setRenderHint(QPainter::Antialiasing);
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
@@ -118,7 +119,8 @@ void NodeView::mousePressEvent(QMouseEvent *e)
     {
         setDragMode(QGraphicsView::RubberBandDrag);
 
-        checkRopeCreation(mapToScene(e->pos()));
+        if (m_isConnectionDragable)
+            checkRopeCreation(mapToScene(e->pos()));
     }
     else if (e->button() == Qt::RightButton)
     {
@@ -512,5 +514,10 @@ void NodeView::setRopeFlexion(qreal value)
 {
     m_ropeFlexion = value;
     update();
+}
+
+void NodeView::setConnectionDragable(bool state)
+{
+    m_isConnectionDragable = state;
 }
 

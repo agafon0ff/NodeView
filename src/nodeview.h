@@ -30,6 +30,7 @@ private:
     bool m_isCheckingColor;
     bool m_isOnlyOneInputConnection;
     qreal m_ropeFlexion;
+    bool m_isConnectionDragable;
 
     void wheelEvent(QWheelEvent *event);
     void drawBackground(QPainter *painter, const QRectF &r);
@@ -81,6 +82,7 @@ public slots:
     void setCheckingColor(bool state = true);
     void setOnlyOneInputConnection(bool state = true);
     void setRopeFlexion(qreal value = 100.0);
+    void setConnectionDragable(bool state = true);
 };
 
 #endif // NODEVIEW_H
