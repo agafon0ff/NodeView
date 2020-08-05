@@ -180,8 +180,13 @@ void NodeItem::updateSize()
     {
         if (port->portType() == PortItem::TypeIn)
             port->setPos(0, (port->posY() + m_indentSize.height() + m_titleSize.height()) - port->size().height() / 2);
-        else port->setPos(m_size.width() - port->size().width(),
-                          (port->posY() + m_indentSize.height() + m_titleSize.height()) - port->size().height() / 2);
+        else
+        {
+            qDebug() << "pos y:" << (port->posY() + m_indentSize.height() + m_titleSize.height()) - port->size().height() / 2;
+
+            port->setPos(m_size.width() - port->size().width(),
+                         (port->posY() + m_indentSize.height() + m_titleSize.height()) - port->size().height() / 2);
+        }
     }
 
     prepareGeometryChange();

@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     NodeItem *node = view.createNode(widget);
     node->setTitle("Node Item");
-    PortItem *portOut = node->createPortOut(15, QColor(Qt::cyan));
+    PortItem *portOut = node->createPortOut(-8, QColor(Qt::cyan));
     node->setPos(-250, 90);
 
     for (int i=0; i<5; ++i)
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         node->setTitle("Node Item " + QString::number(i + 1));
         node->setPos(i * 15, i * 60);
 
-        portIn = node->createPortIn(15, QColor(Qt::cyan));
+        portIn = node->createPortIn(-8, QColor(Qt::cyan));
         view.createConnection(portOut, portIn);
     }
 

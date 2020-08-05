@@ -15,11 +15,11 @@ public:
         TypeOut
     };
 
-    explicit PortItem(PortItem::PortTypes type, uint posY, uint num, QColor color, QGraphicsItem *parent = Q_NULLPTR);
+    explicit PortItem(PortItem::PortTypes type, int posY, uint num, QColor color, QGraphicsItem *parent = Q_NULLPTR);
 
 private:
 
-    uint m_posY;
+    int m_posY;
     QSizeF m_size;
     QColor m_color;
     uint m_number;
@@ -46,7 +46,7 @@ public slots:
     QSizeF size(){return m_size;}
     void resize(qreal w, qreal h);
 
-    uint posY(){return m_posY;}
+    int posY(){return m_posY;}
     void setPosY(int posY);
 
     QColor color(){return m_color;}
