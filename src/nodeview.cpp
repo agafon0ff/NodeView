@@ -18,7 +18,7 @@ NodeView::NodeView(QWidget *parent) : QGraphicsView(parent),
     m_isOnlyOneInputConnection(true),
     m_ropeFlexion(100.0)
 {
-    setRenderHint(QPainter::Antialiasing, true);
+    setRenderHint(QPainter::Antialiasing);
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
     setBackgroundBrush(QBrush(QColor::fromRgb(80,80,80)));
 

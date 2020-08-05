@@ -28,8 +28,6 @@ int main(int argc, char *argv[])
 
     NodeItem *node = view.createNode(widget);
     node->setTitle("Node Item");
-    node->setTitleColor(QColor::fromRgb(160, 160, 160, 200));
-    node->setBackgroundColor(QColor::fromRgb(190, 190, 190, 200));
     PortItem *portOut = node->createPortOut(15, QColor(Qt::cyan));
     node->setPos(-250, 90);
 
@@ -48,8 +46,6 @@ int main(int argc, char *argv[])
 
         NodeItem *node = view.createNode(widget);
         node->setTitle("Node Item " + QString::number(i + 1));
-        node->setTitleColor(QColor::fromRgb(160, 160, 160, 200));
-        node->setBackgroundColor(QColor::fromRgb(190, 190, 190, 200));
         node->setPos(i * 15, i * 60);
 
         portIn = node->createPortIn(15, QColor(Qt::cyan));

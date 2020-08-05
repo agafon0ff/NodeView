@@ -17,7 +17,7 @@ NodeItem::NodeItem(QWidget *widget, QGraphicsItem *parent) : QGraphicsObject(par
     m_titleSize(QSizeF(0,0)),
     m_font(QFont("Calibri",10,QFont::Medium)),
     m_fontColor(QColor(Qt::black)),
-    m_titleColor(QColor::fromRgb(120,120,120,210)),
+    m_titleColor(QColor::fromRgb(160,160,160,210)),
     m_backgroundColor(QColor::fromRgb(190,190,190,210)),
     m_backgroundBrush(QBrush(m_backgroundColor)),
     m_isUserBrush(false),
@@ -64,9 +64,9 @@ void NodeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
     pen.setBrush(QColor::fromRgb(0,0,0,0));
     p->setPen(pen);
 
-    p->setRenderHint(QPainter::Antialiasing);
-    p->setRenderHint(QPainter::SmoothPixmapTransform);
-    p->setRenderHint(QPainter::HighQualityAntialiasing);
+    p->setRenderHints(QPainter::Antialiasing |
+                      QPainter::SmoothPixmapTransform |
+                      QPainter::HighQualityAntialiasing);
 
     QLinearGradient gradient_0(0,m_size.height()/2,m_size.width(),m_size.height()/2);
     gradient_0.setColorAt(0,QColor::fromRgb(0,0,0,0));
@@ -306,9 +306,9 @@ void NodeItem::setTitle(const QString &title)
 
     QFontMetrics fm(m_font);
 #if QT_VERSION > 0x050906
-    m_titleSize = QSizeF(fm.horizontalAdvance(m_title),fm.height());
+    m_titleSize = QSizeF(fm.horizontalAdvance(m_title),fm.height() + 2);
 #else
-    m_titleSize = QSizeF(fm.width(m_title),fm.height());
+    m_titleSize = QSizeF(fm.width(m_title),fm.height() + 2);
 #endif
 
     updateSize();

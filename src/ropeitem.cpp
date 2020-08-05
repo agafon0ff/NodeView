@@ -49,14 +49,13 @@ void RopeItem::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
     Q_UNUSED(item);
 
     QPen pen;
-    pen.setStyle(Qt::DashDotLine);
     pen.setStyle(Qt::SolidLine);
     pen.setCapStyle(Qt::RoundCap);
     pen.setJoinStyle(Qt::RoundJoin);
 
-    p->setRenderHint(QPainter::Antialiasing);
-    p->setRenderHint(QPainter::SmoothPixmapTransform);
-    p->setRenderHint(QPainter::HighQualityAntialiasing);
+    p->setRenderHints(QPainter::Antialiasing |
+                      QPainter::SmoothPixmapTransform |
+                      QPainter::HighQualityAntialiasing);
 
     pen.setBrush(Qt::black);
     pen.setWidth(4);
