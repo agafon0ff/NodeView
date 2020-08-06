@@ -72,6 +72,8 @@ public slots:
     bool createConnection(PortItem *portOut, PortItem *portIn);
     void removePortConnections(PortItem *port);
 
+    void clearView();
+
     QList<NodeItem*> nodeList(){return m_nodeList;}
     QList<RopeItem*> ropeList(){return m_ropeList;}
     QList<GroupItem*> groupList(){return m_groupList;}

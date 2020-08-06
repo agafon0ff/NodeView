@@ -127,7 +127,7 @@ void NodeView::mousePressEvent(QMouseEvent *e)
         NodeItem *node = checkNodeHit(mapToScene(e->pos()));
 
         if (node)
-           emit calledMenuNode(node);
+            emit calledMenuNode(node);
         else emit calledMenuView();
     }
 
@@ -397,6 +397,9 @@ void NodeView::removeNode(NodeItem *node)
             m_ropeList.removeOne(rope);
             m_scene->removeItem(rope);
         }
+
+        port->disconnect();
+        port->deleteLater();
     }
 
     foreach(GroupItem *group, m_groupList)
@@ -404,6 +407,7 @@ void NodeView::removeNode(NodeItem *node)
 
     m_nodeList.removeOne(node);
     m_scene->removeItem(node);
+    node->deleteLater();
 }
 
 NodeItem *NodeView::nodeAt(const QUuid &uuid)
@@ -482,6 +486,29 @@ void NodeView::removePortConnections(PortItem *port)
         m_ropeList.removeOne(rope);
         m_scene->removeItem(rope);
     }
+}
+
+void NodeView::clearView()
+{
+    foreach (NodeItem *node, m_nodeList)
+    {
+        if(node->widget())
+            node->widget()->deleteLater();
+
+        removeNode(node);
+    }
+
+    foreach (GroupItem *group, m_groupList)
+    {
+        m_scene->removeItem(group);
+        group->deleteLater();
+    }
+
+    m_groupList.clear();
+    m_nodeList.clear();
+    m_ropeList.clear();
+    m_selectedNodes.clear();
+    m_scene->clear();
 }
 
 bool NodeView::isPortFree(PortItem *port)
