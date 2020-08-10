@@ -463,7 +463,6 @@ GroupItem *NodeView::getItemGroup(NodeItem *node)
 
 void NodeView::removeGroup(GroupItem *group)
 {
-    qDebug() << "NodeView::removeGroup" << group;
     if (!m_groupList.contains(group)) return;
 
     m_groupList.removeOne(group);
@@ -562,4 +561,3 @@ void NodeView::setConnectionDragable(bool state)
 {
     m_isConnectionDragable = state;
 }
-
