@@ -298,7 +298,8 @@ void NodeItem::removePort(PortItem *port)
             nView->removePortConnections(port);
 
             m_portList.removeOne(port);
-            scene()->removeItem(port);
+            port->disconnect();
+            port->deleteLater();
         }
     }
 }

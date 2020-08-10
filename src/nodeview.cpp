@@ -131,8 +131,8 @@ void NodeView::mousePressEvent(QMouseEvent *e)
         else emit calledMenuView();
     }
 
-    QGraphicsView::mousePressEvent(e);
     update();
+    QGraphicsView::mousePressEvent(e);
 }
 
 void NodeView::mouseMoveEvent(QMouseEvent *e)
@@ -174,8 +174,8 @@ void NodeView::mouseReleaseEvent(QMouseEvent *e)
     }
 
     m_moveScene = false;
-    QGraphicsView::mouseReleaseEvent(e);
     update();
+    QGraphicsView::mouseReleaseEvent(e);
 }
 
 void NodeView::checkRopeCreation(const QPointF &point)
@@ -335,7 +335,8 @@ void NodeView::removeActiveRope()
     m_activeRope->removePortOut();
 
     m_ropeList.removeOne(m_activeRope);
-    m_scene->removeItem(m_activeRope);
+    m_activeRope->disconnect();
+    m_activeRope->deleteLater();
     m_activeRope = Q_NULLPTR;
 }
 
@@ -395,7 +396,8 @@ void NodeView::removeNode(NodeItem *node)
             rope->removePortOut();
 
             m_ropeList.removeOne(rope);
-            m_scene->removeItem(rope);
+            rope->disconnect();
+            rope->deleteLater();
         }
 
         port->disconnect();
@@ -406,7 +408,7 @@ void NodeView::removeNode(NodeItem *node)
         group->removeNode(node);
 
     m_nodeList.removeOne(node);
-    m_scene->removeItem(node);
+    node->disconnect();
     node->deleteLater();
 }
 
@@ -461,11 +463,13 @@ GroupItem *NodeView::getItemGroup(NodeItem *node)
 
 void NodeView::removeGroup(GroupItem *group)
 {
+    qDebug() << "NodeView::removeGroup" << group;
     if (!m_groupList.contains(group)) return;
 
-    group->clearNodes();
     m_groupList.removeOne(group);
-    m_scene->removeItem(group);
+
+    group->disconnect();
+    group->deleteLater();
 }
 
 bool NodeView::createConnection(PortItem *portOut, PortItem *portIn)
@@ -494,7 +498,8 @@ void NodeView::removePortConnections(PortItem *port)
     foreach (RopeItem *rope, ropesToRemove)
     {
         m_ropeList.removeOne(rope);
-        m_scene->removeItem(rope);
+        rope->disconnect();
+        rope->deleteLater();
     }
 }
 
@@ -510,7 +515,7 @@ void NodeView::clearView()
 
     foreach (GroupItem *group, m_groupList)
     {
-        m_scene->removeItem(group);
+        group->disconnect();
         group->deleteLater();
     }
 
