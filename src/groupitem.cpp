@@ -191,6 +191,9 @@ void GroupItem::removeNode(NodeItem *node)
 
     m_nodeList.removeOne(node);
     updateSize();
+
+    if(m_nodeList.isEmpty())
+        emit becameEmpty(this);
 }
 
 void GroupItem::clearNodes()

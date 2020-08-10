@@ -42,6 +42,7 @@ private:
 
 signals:
     void selected(bool state);
+    void becameEmpty(GroupItem *group);
 
 public slots:
     bool isHovered(const QPointF &point);

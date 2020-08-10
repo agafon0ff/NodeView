@@ -431,6 +431,7 @@ void NodeView::addGroup(GroupItem *group)
     group->setPos(m_scenePos);
     m_scene->addItem(group);
     m_groupList.append(group);
+    connect(group, &GroupItem::becameEmpty, this, &NodeView::removeGroup);
 }
 
 GroupItem *NodeView::createGroup(QList<NodeItem *> list)
@@ -456,6 +457,15 @@ GroupItem *NodeView::getItemGroup(NodeItem *node)
     }
 
     return result;
+}
+
+void NodeView::removeGroup(GroupItem *group)
+{
+    if (!m_groupList.contains(group)) return;
+
+    group->clearNodes();
+    m_groupList.removeOne(group);
+    m_scene->removeItem(group);
 }
 
 bool NodeView::createConnection(PortItem *portOut, PortItem *portIn)
