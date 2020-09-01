@@ -408,6 +408,7 @@ void NodeView::removeNode(NodeItem *node)
         group->removeNode(node);
 
     m_nodeList.removeOne(node);
+    m_selectedNodes.removeOne(node);
     node->disconnect();
     node->deleteLater();
 }
