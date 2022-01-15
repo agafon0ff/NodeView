@@ -102,6 +102,8 @@ void NodeView::drawGrid(QPainter *painter, double gridStep)
 
 void NodeView::mousePressEvent(QMouseEvent *e)
 {
+    QMouseEvent fake(e->type(), e->pos(), Qt::LeftButton, Qt::LeftButton, e->modifiers());
+
     m_scenePos = mapToScene(e->pos());
     m_pressPos = m_scenePos;
 
@@ -110,7 +112,6 @@ void NodeView::mousePressEvent(QMouseEvent *e)
         setDragMode(QGraphicsView::ScrollHandDrag);
         setInteractive(false);
 
-        QMouseEvent fake(e->type(), e->pos(), Qt::LeftButton, Qt::LeftButton, e->modifiers());
         e = &fake;
 
         m_moveScene = true;
@@ -159,6 +160,8 @@ void NodeView::mouseMoveEvent(QMouseEvent *e)
 
 void NodeView::mouseReleaseEvent(QMouseEvent *e)
 {
+    QMouseEvent fake(e->type(), e->pos(), Qt::LeftButton, Qt::LeftButton, e->modifiers());
+
     if (e->button() == Qt::LeftButton)
     {
         checkNodesSelected();
@@ -169,7 +172,6 @@ void NodeView::mouseReleaseEvent(QMouseEvent *e)
         setDragMode(QGraphicsView::NoDrag);
         setInteractive(true);
 
-        QMouseEvent fake(e->type(), e->pos(), Qt::LeftButton, Qt::LeftButton, e->modifiers());
         e = &fake;
     }
 
